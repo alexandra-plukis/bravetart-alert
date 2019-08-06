@@ -14,5 +14,3 @@ requests
 2. Navigate to this repo, and run `python stella_parks_alert.py`, and enjoy the results.
     - `previous_title.txt` should contain the most recent title from when **I've** run the script. If it's been a minute, then it'll be a very out of date recipe--that shouldn't matter! 
 3. That is truly it.
-
-Thank you for coming to my TED talk.
