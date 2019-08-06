@@ -6,14 +6,17 @@
 # from Serious Eats
 from bs4 import BeautifulSoup
 import requests
+import yagmail
 
+receiver = "youremail@gmail.com"
+name = "yourname"
 posts = []
 titles = []
 urls = []
 
 # get the most recent title that
 # was input on the last execution
-with open('previous_title.txt', 'r') as file:
+with open('your/path/previous_title.txt', 'r') as file:
     previous = file.read()
 
 # this is Stella Park's page on Serious Eats where all of her
@@ -35,24 +38,26 @@ for post in posts:
     urls.append((post.find('a', {'class': 'module__link'})).get('href'))
 
 i = 0
-
 # if the most recent title is the one that was most recent on the
 # last execution, no new articles :-( )
-if titles[i] == previous:
-    print('\n-----------------')
-    print("No new Bravetart recipes--sorry! Here's the last recipe to reread:\n%s \n%s" % (titles[i], urls[i]))
-    print('-----------------\n')
-
+# if titles[i] == previous:
+# can have some alert system set up, but I do not want any
+# more emails than necessary
 # otherwise, new articles!! We want to list all of them for binge reading
 # if there are multiple articles (but stopping if we've reached the end of
 # the list containing the titles scraped)
-else:
-    print('\n-----------------')
-    print("New Bravetart recipe(s) to read!")
-    print('-----------------')
+if titles[i] != previous:
+    body = "Hi " + name + "!" + "\n\tHere's what's new:\n"
     while ((i < len(titles)) and (titles[i] != previous)):
-        print('%d.) %s\n%s\n' % ((i + 1), titles[i], urls[i]))
+        body += ('%d.) %s\n%s\n' % ((i + 1), titles[i], urls[i]))
         i += 1
+    body += "That's all, enjoy!"
+    yag = yagmail.SMTP('yourusername', 'yourpassword')
+    yag.send(
+        to=receiver,
+        subject="New Bravetart Recipe",
+        contents=body,
+    )
     # reqriting our file to store the most recent article written!
-    with open('previous_title.txt', 'w') as file:
+    with open('your/path/previous_title', 'w') as file:
         file.write(titles[0])
